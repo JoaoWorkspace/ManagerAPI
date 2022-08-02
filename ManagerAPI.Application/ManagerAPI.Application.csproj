@@ -6,4 +6,22 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="TorrentArea\i3dg1qnf.tyx~" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="IoC\" />
+    <Folder Include="Services\" />
+    <Folder Include="TorrentArea\Queries\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="11.0.1" />
+    <PackageReference Include="BencodeNET" Version="4.0.0" />
+    <PackageReference Include="MediatR" Version="10.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="System.Memory.Data" Version="6.0.0" />
+  </ItemGroup>
+
 </Project>
