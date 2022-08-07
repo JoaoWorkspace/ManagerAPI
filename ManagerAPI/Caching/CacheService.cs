@@ -1,4 +1,5 @@
 ﻿using ManagerAPI.Application.TorrentArea.Dtos;
+using ManagerAPI.ExceptionHandling;
 using ManagerAPI.Request;
 using System.Text.Json;
 
@@ -23,8 +24,8 @@ public class CacheService : ICacheService
             return driveFolder;
         }catch(Exception ex)
         {
-            Console.WriteLine($"[ERROR]\tFailed to read {storageDrive}.json from {AppDomain.CurrentDomain.BaseDirectory}");
-            Console.WriteLine($"\tReason: {ex.Message}");
+            ManagerConsole.WriteException($"[ERROR]\tFailed to read {storageDrive}.json from {AppDomain.CurrentDomain.BaseDirectory}");
+            ManagerConsole.WriteException($"\tReason: {ex.Message}");
             return null;
         }
         
@@ -45,8 +46,8 @@ public class CacheService : ICacheService
             return true;
         }catch(Exception ex)
         {
-            Console.WriteLine($"[ERROR]\tFailed to write {driveFolder.Name} inside {AppDomain.CurrentDomain.BaseDirectory}");
-            Console.WriteLine($"\tReason: {ex.Message}");
+            ManagerConsole.WriteException($"[ERROR]\tFailed to write {driveFolder.Name} inside {AppDomain.CurrentDomain.BaseDirectory}");
+            ManagerConsole.WriteException($"\tReason: {ex.Message}");
             return false;
         }
         

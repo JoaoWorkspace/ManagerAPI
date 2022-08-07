@@ -33,7 +33,7 @@ builder.Services.AddSwaggerGen();
 //Advanced - Register our services through DependencyInjection
 //builder.Services.AddScoped<IService, Service>();
 builder.Services.AddScoped<ITorrentService, TorrentService>();
-builder.Services.AddSingleton<ICacheService, CacheService>();
+builder.Services.AddScoped<ICacheService, CacheService>();
 ////
 ///
 //Advanced - Register our Cache as a Singleton
