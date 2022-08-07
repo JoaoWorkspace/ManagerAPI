@@ -11,16 +11,20 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="IoC\" />
     <Folder Include="Services\" />
     <Folder Include="TorrentArea\Queries\" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Autofac" Version="6.4.0" />
     <PackageReference Include="AutoMapper" Version="11.0.1" />
     <PackageReference Include="BencodeNET" Version="4.0.0" />
+    <PackageReference Include="Cqrs" Version="4.3.20" />
+    <PackageReference Include="File.TypeChecker" Version="3.0.0" />
     <PackageReference Include="MediatR" Version="10.0.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="NsfwSpy" Version="3.4.3" />
+    <PackageReference Include="QBittorrent.Client" Version="1.8.22216.3" />
     <PackageReference Include="System.Memory.Data" Version="6.0.0" />
   </ItemGroup>
 
