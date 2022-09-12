@@ -5,6 +5,8 @@ using MediatR;
 using NsfwSpyNS;
 using ManagerAPI.Caching;
 using System.Reflection;
+using ManagerAPI.Startup;
+using QBittorrent.Client;
 
 #region builder
 
@@ -30,52 +32,68 @@ builder.Services.AddSwaggerGen();
 //
 ///
 ////
-//Advanced - Register our services through DependencyInjection
-//builder.Services.AddScoped<IService, Service>();
-builder.Services.AddScoped<ITorrentService, TorrentService>();
-builder.Services.AddScoped<ICacheService, CacheService>();
-////
-///
-//Advanced - Register our Cache as a Singleton
-builder.Services.AddSingleton<ICache, Cache>();
-////
-///
-//Also necessary to register NsfwSpy so we can inject it into the controllers
-builder.Services.AddScoped<INsfwSpy, NsfwSpy>();
-////
-///
-//Also necessary to register MediatR on all assemblies (except dynamically generated assemblies (by Reflection)
-//builder.Services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies().Where(a => !a.IsDynamic).ToArray());
-builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
+//Advanced - Instance and Register our Configuration Classes (which need to reflect the nested properties)
+//builder.Services.Configure<AppSettingsClass>(builder.Configuration.GetSection(AppSettingsClass.SectionKey));
+//builder.Services.Configure<TorrentSettings>(builder.Configuration.GetSection(TorrentSettings.SectionKey));
+//builder.Services.Configure<MusicSettings>(builder.Configuration.GetSection(MusicSettings.SectionKey));
 //End of Advanced
 ////
 ///
 //
 
+
+//
+///
+////
+//Advanced - Register our Scoped and Singleton Services/Classes through DependencyInjection
+builder.Services.AddScoped<ITorrentService, TorrentService>();
+builder.Services.AddScoped<ICacheService, CacheService>();
+builder.Services.AddSingleton<ICache, Cache>();
+builder.Services.AddSingleton<IQBittorrentClient>(new QBittorrentClient(new Uri("http://127.0.0.1:8080/")));
+//End of Advanced
+////
+///
+//
+
+
+//
+///
+////
+//Advanced - Register NsfwSpy so we can inject it into the controllers
+builder.Services.AddScoped<INsfwSpy, NsfwSpy>();
+//Also necessary to register MediatR on all assemblies (by Reflection)
+builder.Services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies().Where(a => !a.IsDynamic).ToArray());
+//Also necessary to register assemblies in all projects associated with our API (otherwise MediatR cannot properly detect the CommandHandlers from other Assemblies)
+builder.Services.ConfigureManagerAPIMicroservice(builder);
+//End of Advanced
+////
+///
+//
+
+
+
+
 #endregion builder
 #region app
 
 var app = builder.Build();
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI(
-        //
-        ///
-        ////
-        //Advanced - This little piece of code greatly enhances performance when returning large amounts of data
-        //Configuration: AppSettings.json
-        config =>
-        config.ConfigObject.AdditionalItems["syntaxHighlight"] = new Dictionary<string, object>
-        {
-            ["activated"] = bool.Parse(builder.Configuration["SwaggerOptions:UseSyntaxHighlight"])
-        }
-        //End of Advanced
-        ////
-        ///
-        //
-    );
-}
+app.UseSwagger();
+app.UseSwaggerUI(
+   //
+   ///
+   ////
+   //Advanced - This little piece of code greatly enhances performance when returning large amounts of data
+    //Configuration: AppSettings.json
+   config =>
+   config.ConfigObject.AdditionalItems["syntaxHighlight"] = new Dictionary<string, object>
+   {
+       ["activated"] = bool.Parse(builder.Configuration["SwaggerOptions:UseSyntaxHighlight"])
+   }
+   //End of Advanced
+   ////
+   ///
+   //
+);
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();

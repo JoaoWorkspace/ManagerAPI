@@ -1,14 +1,23 @@
-﻿using ManagerAPI.Application.TorrentArea.Dtos.Enums;
+﻿using ManagerAPI.Application.TorrentArea.Dtos;
+using ManagerAPI.Application.TorrentArea.Dtos.Enums;
 using Newtonsoft.Json.Converters;
+using QBittorrent.Client;
 using System;
 using System.Text.Json.Serialization;
 
 namespace ManagerAPI.Application.TorrentArea.Commands.SearchTorrent;
 
-public class SearchTorrentCommand : TorrentCommand<string>
+public class SearchTorrentCommand : TorrentCommand<List<string>>
 {
-    public SearchTorrentCommand(ActionConnector actionConnector, List<string> paths, BinaryData? data) 
-        : base(ManagedAction.Search, ActionTarget.Torrent, ActionConnector.Inside, paths, data)
+    public TorrentListFilter TorrentFilter { get; set; } = TorrentListFilter.All;
+    public string? Category { get; set; } = null;
+    public TorrentState? TorrentState { get; set; }
+
+    public SearchTorrentCommand(TorrentListFilter torrentFilter, string? category = null, TorrentState? torrentState = null, List<string>? paths = null, List<BinaryData>? data = null)
+        : base(ManagedAction.Search, paths, data)
     {
+        TorrentFilter = torrentFilter;
+        Category = category;
+        TorrentState = torrentState;
     }
 }
