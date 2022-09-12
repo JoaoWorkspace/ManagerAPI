@@ -1,9 +1,6 @@
-using ManagerAPI.Application.FileArea.Commands.GetTorrentsFromFolder;
 using ManagerAPI.Application.TorrentArea;
 using ManagerAPI.Application.TorrentArea.Commands;
 using ManagerAPI.Application.TorrentArea.Commands.AddTorrentsFromFile;
-using ManagerAPI.Application.TorrentArea.Commands.CreateDriveFolderJson;
-using ManagerAPI.Application.TorrentArea.Commands.CreateFolderJson;
 using ManagerAPI.Application.TorrentArea.Commands.EditTorrent;
 using ManagerAPI.Application.TorrentArea.Commands.GetDetailedTorrent;
 using ManagerAPI.Application.TorrentArea.Commands.GetLessDetailedTorrent;
@@ -11,7 +8,6 @@ using ManagerAPI.Application.TorrentArea.Commands.GetTorrentClientSummary;
 using ManagerAPI.Application.TorrentArea.Commands.GetTorrentsAndTorrentFile;
 using ManagerAPI.Application.TorrentArea.Commands.GetUnregisteredTorrent;
 using ManagerAPI.Application.TorrentArea.Commands.SearchTorrent;
-using ManagerAPI.Application.TorrentArea.Dtos;
 using ManagerAPI.Application.FileArea.Models;
 using ManagerAPI.Application.TorrentArea.Models;
 
@@ -24,6 +20,10 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Converters;
 using QBittorrent.Client;
 using System.Text.Json.Serialization;
+using ManagerAPI.Application.FileArea.Commands.CreateDriveFolderJson;
+using ManagerAPI.Application.FileArea;
+using ManagerAPI.Application.FileArea.Commands.GetFilesFromFolder;
+using ManagerAPI.Application.TorrentArea.Models.Enum;
 
 namespace ManagerAPI.Controllers.v1
 {
@@ -35,80 +35,12 @@ namespace ManagerAPI.Controllers.v1
         private readonly IFileService fileService;
         private readonly ITorrentService torrentService;
         private readonly ILogger<TorrentController> _logger;
-        public TorrentController(ICacheService cacheService, ITorrentService torrentService, ILogger<TorrentController> logger)
+        public TorrentController(ICacheService cacheService, IFileService fileService, ITorrentService torrentService, ILogger<TorrentController> logger)
         {
             this.cacheService = cacheService;
+            this.fileService = fileService;
             this.torrentService = torrentService;
             _logger = logger;
-        }
-
-        /// <summary>
-        /// Creates a cached JSON file containing the FileSystem structure FolderDto for each selected Drive (if exists)
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns>A simple list of selected drives, and if their JSON file was created.</returns>
-        [HttpPost("CreateCachedDriverFolderJson")]
-        public async Task<TorrentManagerOutput> CreateDriveFolderJson([FromForm] List<StorageDrive> request, CancellationToken cancellationToken)
-        {
-            List<Tuple<StorageDrive, bool>> result = new List<Tuple<StorageDrive, bool>>();
-            foreach (StorageDrive drive in request.Distinct())
-            {
-                try
-                {
-                    List<string> strings = new() { $"{drive}:/" };
-                    FileOrFolder driveFolder = await torrentService.CreateDriveFolderJson(new CreateDriveFolderJsonCommand(strings), cancellationToken);
-                    bool success = await cacheService.SerializeDriveToCache(drive, driveFolder, cancellationToken);
-                    if (success)
-                    {
-                        result.Add(new Tuple<StorageDrive, bool>(drive, true));
-                    }
-                    else
-                    {
-                        result.Add(new Tuple<StorageDrive, bool>(drive, false));
-                    }
-
-                }
-                catch (Exception ex)
-                {
-                    ManagerConsole.WriteException("CreateCachedDriverFolderJson", $"Failed to create a DriveFolderJson on cache on drive {drive}", ex);
-                    result.Add(new Tuple<StorageDrive, bool>(drive, false));
-                }
-            }
-            return new TorrentManagerOutput(Ok(result));
-        }
-
-        [HttpGet("GetCachedDriveFolderJson")]
-        public async Task<TorrentManagerOutput> GetCachedDriveFolderJson([FromForm] List<StorageDrive> request, CancellationToken cancellationToken)
-        {
-            List<FileOrFolder> driveFolders = new List<FileOrFolder>();
-            foreach (StorageDrive drive in request.Distinct())
-            {
-                FileOrFolder? toAdd = await cacheService.DeserializeDriveFromCache(drive, cancellationToken);
-                if (toAdd != null) driveFolders.Add(toAdd);
-            }
-            return new TorrentManagerOutput(Ok(driveFolders));
-        }
-
-        [HttpPost("CreateFolderJson")]
-        public async Task<TorrentManagerOutput> CreateFolderJson([FromBody] List<FolderRequest> request, CancellationToken cancellationToken)
-        {
-            List<Tuple<string, bool>> result = new List<Tuple<string, bool>>();
-
-            foreach (FolderRequest folderRequest in request)
-            {
-                try
-                {
-                    List<string> strings = new() { folderRequest.FolderPath };
-                    var folder = await torrentService.CreateFolderJson(new CreateFolderJsonCommand(strings, folderRequest.SavePath, folderRequest.MaximumFolderDepth), cancellationToken);
-                    result.Add(new Tuple<string, bool>(folderRequest.SavePath, folder != null));
-                }
-                catch (Exception ex)
-                {
-                    ManagerConsole.WriteException("CreateFolderJson", $"Failed to create a FolderJson for {folderRequest.FolderPath} on {folderRequest.SavePath}", ex);
-                    result.Add(new Tuple<string, bool>(folderRequest.FolderPath, false));
-                }
-            }
-            return new TorrentManagerOutput(Ok(result));
         }
 
         [HttpPut("GetTorrentClientSummary")]
@@ -275,13 +207,13 @@ namespace ManagerAPI.Controllers.v1
         }
 
         [HttpPost("AddTorrentsFromFolder")]
-        public async Task<TorrentManagerOutput> AddTorrentsFromFile([FromForm] AddTorrentRequest request, CancellationToken cancellationToken)
+        public async Task<TorrentManagerOutput> AddTorrentsFromFolder([FromForm] AddTorrentRequest request, CancellationToken cancellationToken)
         {
             try
             {
-                var torrentFilesToAdd = await fileService.GetAllTorrents(new GetTorrentsFromFolderCommand(request.Paths), cancellationToken);
+                var torrentFilesToAdd = await fileService.GetFilesFromFolder(new GetFilesFromFolderCommand(request.Paths, new() { ".torrent" }), cancellationToken);
                 var result = await torrentService.AddTorrentsFromFile(new AddTorrentsFromFileCommand(
-                    request.Paths,
+                    torrentFilesToAdd,
                     request.Category,
                     request.DestinationFolder,
                     request.StartTorrent), cancellationToken);

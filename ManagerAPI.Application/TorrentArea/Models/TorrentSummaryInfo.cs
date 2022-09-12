@@ -1,4 +1,4 @@
-﻿using ManagerAPI.Application.TorrentArea.Dtos.SummaryModels;
+﻿using ManagerAPI.Application.TorrentArea.Models.SummaryModels;
 using QBittorrent.Client;
 using System.ComponentModel;
 

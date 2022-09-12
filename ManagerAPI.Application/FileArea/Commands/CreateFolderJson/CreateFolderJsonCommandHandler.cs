@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using Cqrs.Domain;
 using ManagerAPI.Application.ExceptionHandling;
-using ManagerAPI.Application.TorrentArea.Dtos;
-using ManagerAPI.Application.TorrentArea.Dtos.Enums;
+using ManagerAPI.Application.FileArea.Models;
+using ManagerAPI.Application.FileArea.Models.Enums;
 using MediatR;
 
 namespace ManagerAPI.Application.FileArea.Commands.CreateFolderJson;
@@ -52,7 +52,7 @@ public class CreateFolderJsonCommandHandler : IRequestHandler<CreateFolderJsonCo
     /// <returns></returns>
     public async Task<FileOrFolder> GetDirectoryAsFolder(DirectoryInfo directory, int depth = 0, int depthLimit = 0)
     {
-        FileOrFolder folder = new(Dtos.Enums.FileFolderSwitch.Folder, directory.FullName, directory.Name, depth);
+        FileOrFolder folder = new(FileFolderSwitch.Folder, directory.FullName, directory.Name, depth);
         if (depthLimit == 0 || depthLimit > folder.Depth)
         {
             foreach (DirectoryInfo d in directory.EnumerateDirectories())

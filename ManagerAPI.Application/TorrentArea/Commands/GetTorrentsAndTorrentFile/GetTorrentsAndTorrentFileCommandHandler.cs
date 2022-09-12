@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using ManagerAPI.Application.ExceptionHandling;
 using ManagerAPI.Application.TorrentArea.Models;
-using ManagerAPI.Application.TorrentArea.Models.Enums;
 using MediatR;
 using QBittorrent.Client;
 

@@ -1,6 +1,4 @@
 ﻿using ManagerAPI.Application.TorrentArea.Commands.AddTorrentsFromFile;
-using ManagerAPI.Application.TorrentArea.Commands.CreateDriveFolderJson;
-using ManagerAPI.Application.TorrentArea.Commands.CreateFolderJson;
 using ManagerAPI.Application.TorrentArea.Commands.EditTorrent;
 using ManagerAPI.Application.TorrentArea.Commands.GetDetailedTorrent;
 using ManagerAPI.Application.TorrentArea.Commands.GetLessDetailedTorrent;
@@ -9,7 +7,8 @@ using ManagerAPI.Application.TorrentArea.Commands.GetTorrentsAndTorrentFile;
 using ManagerAPI.Application.TorrentArea.Commands.GetUnregisteredTorrent;
 using ManagerAPI.Application.TorrentArea.Commands.RemoveTorrentAndDeleteContent;
 using ManagerAPI.Application.TorrentArea.Commands.SearchTorrent;
-using ManagerAPI.Application.TorrentArea.Dtos;
+using ManagerAPI.Application.TorrentArea.Models;
+
 using MediatR;
 using QBittorrent.Client;
 
@@ -23,16 +22,6 @@ public class TorrentService : ITorrentService
     {
         this.mediator = mediator;
         this.client = client;
-    }
-
-    public async Task<FileOrFolder> CreateDriveFolderJson(CreateDriveFolderJsonCommand command, CancellationToken cancellationToken)
-    {
-        return await mediator.Send(command, cancellationToken);
-    }
-
-    public async Task<FileOrFolder> CreateFolderJson(CreateFolderJsonCommand command, CancellationToken cancellationToken)
-    {
-        return await mediator.Send(command, cancellationToken);
     }
 
     public async Task<TorrentSummaryInfo> GetTorrentClientSummaryAsync(GetTorrentClientSummaryCommand command, CancellationToken cancellationToken)

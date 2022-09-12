@@ -1,5 +1,5 @@
-﻿using ManagerAPI.Application.TorrentArea.Dtos;
-using ManagerAPI.Application.TorrentArea.Dtos.Enums;
+﻿using ManagerAPI.Application.TorrentArea.Models;
+using ManagerAPI.Domain.Models.Enum;
 using Newtonsoft.Json.Converters;
 using QBittorrent.Client;
 using System;

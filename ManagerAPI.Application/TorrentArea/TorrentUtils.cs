@@ -1,7 +1,7 @@
 ﻿using ManagerAPI.Application.ExceptionHandling;
 using ManagerAPI.Application.FileArea.Models;
+using ManagerAPI.Application.FileArea.Models.Enums;
 using ManagerAPI.Application.TorrentArea.Models;
-using ManagerAPI.Application.TorrentArea.Models.Enums;
 using QBittorrent.Client;
 using System.Text.RegularExpressions;
 

@@ -1,7 +1,4 @@
-﻿using ManagerAPI.Application.TorrentArea.Dtos.Enums;
-using System.ComponentModel;
-
-namespace ManagerAPI.Request;
+﻿namespace ManagerAPI.Request;
 
 public class EditTorrentRequest
 {

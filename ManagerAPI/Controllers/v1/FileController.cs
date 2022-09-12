@@ -1,8 +1,6 @@
 using ManagerAPI.Application.FileArea;
-using ManagerAPI.Application.FileArea.Commands;
 using ManagerAPI.Application.FileArea.Commands.CreateDriveFolderJson;
 using ManagerAPI.Application.FileArea.Commands.CreateFolderJson;
-using ManagerAPI.Application.FileArea.Commands.GetTorrentsFromFolder;
 using ManagerAPI.Application.FileArea.Models;
 
 using ManagerAPI.Caching;
@@ -11,9 +9,6 @@ using ManagerAPI.Request;
 using ManagerAPI.Response;
 using ManagerApplication.FileArea.Models;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Converters;
-using QBittorrent.Client;
-using System.Text.Json.Serialization;
 
 namespace ManagerAPI.Controllers.v1
 {
@@ -88,7 +83,7 @@ namespace ManagerAPI.Controllers.v1
                 try
                 {
                     List<string> strings = new() { folderRequest.FolderPath };
-                    var folder = await torrentService.CreateFolderJson(new CreateFolderJsonCommand(strings, folderRequest.SavePath, folderRequest.MaximumFolderDepth), cancellationToken);
+                    var folder = await fileService.CreateFolderJson(new CreateFolderJsonCommand(strings, folderRequest.SavePath, folderRequest.MaximumFolderDepth), cancellationToken);
                     result.Add(new Tuple<string, bool>(folderRequest.SavePath, folder != null));
                 }
                 catch (Exception ex)

@@ -48,9 +48,9 @@ public class CreateDriveFolderJsonCommandHandler : IRequestHandler<CreateDriveFo
     /// <param name="depth">Sets the current folder/file's depth - Should always be 0 when calling this method, since the only time it's not 0 is when the method calls itself recurvsively.</param>
     /// <param name="depthLimit">How many subfolder levels we are willing to dig into. null = No Depth</param>
     /// <returns></returns>
-    public async Task<Dtos.FileOrFolder> GetDirectoryAsFolder(DirectoryInfo directory, int depth = 0, int depthLimit = 0)
+    public async Task<Models.FileOrFolder> GetDirectoryAsFolder(DirectoryInfo directory, int depth = 0, int depthLimit = 0)
     {
-        Dtos.FileOrFolder folder = new(Dtos.Enums.FileFolderSwitch.Folder, directory.FullName, directory.Name, depth);
+        Models.FileOrFolder folder = new(Models.Enums.FileFolderSwitch.Folder, directory.FullName, directory.Name, depth);
         if (depthLimit == 0 || depthLimit > folder.Depth)
         {
             foreach (DirectoryInfo d in directory.EnumerateDirectories())

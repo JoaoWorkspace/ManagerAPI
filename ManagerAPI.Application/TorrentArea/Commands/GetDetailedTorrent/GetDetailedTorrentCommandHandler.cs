@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
 using Cqrs.Domain;
 using ManagerAPI.Application.ExceptionHandling;
-using ManagerAPI.Application.TorrentArea.Dtos;
-using ManagerAPI.Application.TorrentArea.Dtos.Enums;
+using ManagerAPI.Application.TorrentArea.Models;
 using MediatR;
 using Newtonsoft.Json.Linq;
 using QBittorrent.Client;

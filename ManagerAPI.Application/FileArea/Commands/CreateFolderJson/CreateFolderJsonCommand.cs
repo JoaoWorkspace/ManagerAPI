@@ -1,9 +1,5 @@
-﻿using ManagerAPI.Application.TorrentArea.Dtos;
-using ManagerAPI.Application.TorrentArea.Dtos.Enums;
-using MediatR;
-using Newtonsoft.Json.Converters;
-using System;
-using System.Text.Json.Serialization;
+﻿using ManagerAPI.Application.FileArea.Models;
+using ManagerAPI.Domain.Models.Enum;
 
 namespace ManagerAPI.Application.FileArea.Commands.CreateFolderJson;
 

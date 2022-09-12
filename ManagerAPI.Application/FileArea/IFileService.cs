@@ -1,7 +1,7 @@
 ﻿using ManagerAPI.Application.FileArea.Commands;
 using ManagerAPI.Application.FileArea.Commands.CreateDriveFolderJson;
 using ManagerAPI.Application.FileArea.Commands.CreateFolderJson;
-using ManagerAPI.Application.FileArea.Commands.GetTorrentsFromFolder;
+using ManagerAPI.Application.FileArea.Commands.GetFilesFromFolder;
 
 
 using ManagerAPI.Application.FileArea.Models;
@@ -14,5 +14,5 @@ public interface IFileService
 {
     Task<FileOrFolder> CreateDriveFolderJson(CreateDriveFolderJsonCommand command, CancellationToken cancellationToken);
     Task<FileOrFolder> CreateFolderJson(CreateFolderJsonCommand command, CancellationToken cancellationToken);
-    Task<List<string>> GetTorrentsFromFolder(GetTorrentsFromFolderCommand command, CancellationToken cancellationToken);
+    Task<List<string>> GetFilesFromFolder(GetFilesFromFolderCommand command, CancellationToken cancellationToken);
 }

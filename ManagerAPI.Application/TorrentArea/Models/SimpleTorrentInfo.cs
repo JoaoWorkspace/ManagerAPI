@@ -1,4 +1,5 @@
-﻿using QBittorrent.Client;
+﻿using ManagerAPI.Application.FileArea.Models;
+using QBittorrent.Client;
 
 namespace ManagerAPI.Application.TorrentArea.Models;
 public class SimpleTorrentInfo

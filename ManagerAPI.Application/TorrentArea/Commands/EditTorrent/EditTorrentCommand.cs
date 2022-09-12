@@ -1,4 +1,4 @@
-﻿using ManagerAPI.Application.TorrentArea.Dtos.Enums;
+﻿using ManagerAPI.Domain.Models.Enum;
 
 namespace ManagerAPI.Application.TorrentArea.Commands.EditTorrent;
 

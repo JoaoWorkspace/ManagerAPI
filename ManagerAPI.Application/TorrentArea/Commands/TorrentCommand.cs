@@ -1,6 +1,6 @@
 ﻿using Cqrs.Commands;
 using Cqrs.Messages;
-using ManagerAPI.Application.TorrentArea.Dtos.Enums;
+using ManagerAPI.Domain.Models.Enum;
 using MediatR;
 using Newtonsoft.Json.Converters;
 using System.Text.Json.Serialization;

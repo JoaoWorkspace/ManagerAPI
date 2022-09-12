@@ -1,4 +1,4 @@
-﻿using ManagerAPI.Application.TorrentArea.Dtos;
+﻿using ManagerAPI.Application.FileArea.Models;
 using ManagerAPI.Request;
 using ManagerApplication.FileArea.Models;
 

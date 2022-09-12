@@ -30,4 +30,8 @@
     <PackageReference Include="Torrent" Version="1.4.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ManagerAPI.Domain\ManagerAPI.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

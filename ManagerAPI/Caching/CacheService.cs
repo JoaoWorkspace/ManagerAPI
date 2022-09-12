@@ -1,4 +1,5 @@
-﻿using ManagerAPI.Application.TorrentArea.Dtos;
+﻿using ManagerAPI.Application.FileArea.Models;
+using ManagerAPI.Application.TorrentArea.Models;
 using ManagerAPI.ExceptionHandling;
 using ManagerAPI.Request;
 using ManagerApplication.FileArea.Models;

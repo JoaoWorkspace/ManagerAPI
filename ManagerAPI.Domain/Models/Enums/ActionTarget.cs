@@ -1,4 +1,4 @@
-﻿namespace ManagerAPI.Application.TorrentArea.Models.Enum;
+﻿namespace ManagerAPI.Domain.Models.Enum;
 public enum ActionTarget
 {
     Torrent = 0,
