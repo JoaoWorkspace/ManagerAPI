@@ -26,14 +26,22 @@ public class AddTorrentsFromFileCommandHandler : IRequestHandler<AddTorrentsFrom
 
     public async Task<bool> Handle(AddTorrentsFromFileCommand request, CancellationToken cancellationToken)
     {
-        AddTorrentFilesRequest addTorrentsRequest = new AddTorrentFilesRequest(request.FileOrFolderPaths)
+        foreach (int batch in Enumerable.Range(0, request.FileOrFolderPaths.Count()))
         {
-            ContentLayout = TorrentContentLayout.Original,
-            Category = request.Category,
-            DownloadFolder = request.SavePath,
-            Paused = !request.StartTorrent
-        };
-        await client.AddTorrentsAsync(addTorrentsRequest, cancellationToken);
+            var torrent = request.FileOrFolderPaths.Take(1).First();
+            request.FileOrFolderPaths.Remove(torrent);
+            AddTorrentFilesRequest addTorrentsRequest = new AddTorrentFilesRequest(torrent)
+            {
+                ContentLayout = TorrentContentLayout.Original,
+                Category = request.Category,
+                DownloadFolder = request.SavePath,
+                Paused = !request.StartTorrent
+            };
+            Task addToClient = client.AddTorrentsAsync(addTorrentsRequest, cancellationToken);
+            Task print = Task.Run(() => ManagerApplicationConsole.WriteInformation("AddTorrentsFromFileCommandHandler", $"Added torrent #{batch}: {torrent} to the Qbittorrent Client."));
+            await Task.WhenAll(addToClient, print);
+        }
+        
         return true;
     }
 }
