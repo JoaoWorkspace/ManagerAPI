@@ -4,29 +4,38 @@ using ManagerAPI.Application.ExceptionHandling;
 using ManagerAPI.Application.FileArea.Models;
 using ManagerAPI.Application.FileArea.Models.Enums;
 using MediatR;
+using System.Web.Http.Results;
 
 namespace ManagerAPI.Application.FileArea.Commands.CreateFolderJson;
 
-public class CreateFolderJsonCommandHandler : IRequestHandler<CreateFolderJsonCommand, FileOrFolder>
+public class CreateFolderJsonCommandHandler : IRequestHandler<CreateFolderJsonCommand, string>
 {
     private readonly IMediator mediator;
     private readonly IMapper mapper;
     public CreateFolderJsonCommandHandler(
         IMediator mediator,
         IMapper mapper
-        //ITorrentRepository torrentRepository
         )
     {
         this.mediator = mediator;
         this.mapper = mapper;
     }
 
-    public async Task<FileOrFolder> Handle(CreateFolderJsonCommand request, CancellationToken cancellationToken)
+    public async Task<string> Handle(CreateFolderJsonCommand request, CancellationToken cancellationToken)
     {
-        var result = await GetDirectoryAsFolder(request.FileOrFolderPaths[0], request.MaxDepth);
-        await SerializeFolderToSavePath(result, request.PathToSaveJson, cancellationToken);
-        var mappedResult = this.mapper.Map<FileOrFolder>(result);
-        return mappedResult;
+        DateTime start = DateTime.UtcNow;
+
+        try
+        {
+            var result = await GetDirectoryAsFolder(request.FileOrFolderPaths[0], request.MaxDepth);
+            await SerializeFolderToSavePath(result, request.PathToSaveJson, cancellationToken);
+            var mappedResult = this.mapper.Map<FileOrFolder>(result);
+            return "Success";
+        }
+        catch(Exception ex)
+        {
+            return "Exception";
+        }
     }
 
     /// <summary>
@@ -59,8 +68,9 @@ public class CreateFolderJsonCommandHandler : IRequestHandler<CreateFolderJsonCo
             {
                 try
                 {
-                    folder.Files?.Add(await GetDirectoryAsFolder(d, folder.Depth + 1, depthLimit));
+                    folder.FilesOrFolders?.Add(await GetDirectoryAsFolder(d, folder.Depth + 1, depthLimit));
                     folder.FolderCount++;
+                    folder.Bytes += folder.FilesOrFolders.Single(folder => folder.FullPath == d.FullName).Bytes;
                 }
                 catch (Exception ex)
                 {
@@ -71,27 +81,28 @@ public class CreateFolderJsonCommandHandler : IRequestHandler<CreateFolderJsonCo
         }
         foreach (FileInfo f in directory.GetFiles())
         {
-            folder.Files?.Add(new FileOrFolder(FileFolderSwitch.File, f.FullName, f.Name, folder.Depth, fileSizeBytes: f.Length));
+            folder.FilesOrFolders?.Add(new FileOrFolder(FileFolderSwitch.File, f.FullName, f.Name, folder.Depth, fileSizeBytes: f.Length));
+            folder.Bytes += f.Length;
         }
         return folder;
     }
 
-    public async Task<bool> SerializeFolderToSavePath(FileOrFolder driveFolder, string savePath, CancellationToken cancellationToken)
+    public async Task SerializeFolderToSavePath(FileOrFolder driveFolder, string savePath, CancellationToken cancellationToken)
     {
         try
         {
             //Open CacheFile to write
-            string path = $"{savePath}/{driveFolder.Name}.json";
+            string path = $"{savePath}/{driveFolder.Name.Substring(0,1)}.json";
+            Directory.CreateDirectory(savePath);
             await using FileStream createStream = File.Create(path);
             //Write the serialized json to file
             await System.Text.Json.JsonSerializer.SerializeAsync(createStream, driveFolder, cancellationToken: cancellationToken);
-            Console.WriteLine($"Written {driveFolder.Name} inside {AppDomain.CurrentDomain.BaseDirectory}");
-            return true;
+            Console.WriteLine($"Written {driveFolder.Name} inside {path}.");
         }
         catch (Exception ex)
         {
             ManagerApplicationConsole.WriteException("SerializeFolderToSavePath", $"Failed to write {driveFolder.Name} inside {savePath}", ex);
-            return false;
+            throw ex;
         }
     }
 }

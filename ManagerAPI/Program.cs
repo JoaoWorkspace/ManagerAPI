@@ -7,6 +7,8 @@ using ManagerAPI.Caching;
 using System.Reflection;
 using ManagerAPI.Startup;
 using QBittorrent.Client;
+using ManagerAPI.Settings;
+using ManagerAPI.Application.FileArea;
 
 #region builder
 
@@ -34,8 +36,9 @@ builder.Services.AddSwaggerGen();
 ////
 //Advanced - Instance and Register our Configuration Classes (which need to reflect the nested properties)
 //builder.Services.Configure<AppSettingsClass>(builder.Configuration.GetSection(AppSettingsClass.SectionKey));
-//builder.Services.Configure<TorrentSettings>(builder.Configuration.GetSection(TorrentSettings.SectionKey));
+builder.Services.Configure<CacheSettings>(builder.Configuration.GetSection(CacheSettings.SectionKey));
 //builder.Services.Configure<MusicSettings>(builder.Configuration.GetSection(MusicSettings.SectionKey));
+//builder.Services.Configure<TorrentSettings>(builder.Configuration.GetSection(TorrentSettings.SectionKey));
 //End of Advanced
 ////
 ///
@@ -46,8 +49,9 @@ builder.Services.AddSwaggerGen();
 ///
 ////
 //Advanced - Register our Scoped and Singleton Services/Classes through DependencyInjection
-builder.Services.AddScoped<ITorrentService, TorrentService>();
 builder.Services.AddScoped<ICacheService, CacheService>();
+builder.Services.AddScoped<IFileService, FileService>();
+builder.Services.AddScoped<ITorrentService, TorrentService>();
 builder.Services.AddSingleton<ICache, Cache>();
 builder.Services.AddSingleton<IQBittorrentClient>(new QBittorrentClient(new Uri("http://127.0.0.1:8080/")));
 //End of Advanced
@@ -70,10 +74,8 @@ builder.Services.ConfigureManagerAPIMicroservice(builder);
 ///
 //
 
-
-
-
 #endregion builder
+
 #region app
 
 var app = builder.Build();

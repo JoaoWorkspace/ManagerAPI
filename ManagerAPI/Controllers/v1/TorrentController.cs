@@ -209,6 +209,7 @@ namespace ManagerAPI.Controllers.v1
         [HttpPost("AddTorrentsFromFolder")]
         public async Task<TorrentManagerOutput> AddTorrentsFromFolder([FromForm] AddTorrentRequest request, CancellationToken cancellationToken)
         {
+            DateTime start = DateTime.UtcNow;
             try
             {
                 var torrentFilesToAdd = await fileService.GetFilesFromFolder(new GetFilesFromFolderCommand(request.Paths, new() { ".torrent" }), cancellationToken);

@@ -1,15 +1,29 @@
-﻿using FileTypeChecker;
-using FileTypeChecker.Abstracts;
-using ManagerAPI.Application.ExceptionHandling;
+﻿using ManagerAPI.Application.ExceptionHandling;
 using ManagerAPI.Application.FileArea.Models.Enums;
 using ManagerAPI.Application.TorrentArea.Models.Enum;
 using NsfwSpyNS;
+using System.Linq;
+using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 
 namespace ManagerAPI.Application.FileArea.Models;
 
 public class FileOrFolder
 {
+    [JsonConverter(typeof(JsonStringEnumConverter))]
+    public FileFolderSwitch FileFolderSwitch { get; set; } = FileFolderSwitch.Folder;
+    [JsonConverter(typeof(JsonStringEnumConverter))]
+    public SafeForWork Classification { get; set; }
+    public string FullPath { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
+    public int Depth { get; set; } = 0;
+    public bool IsBeingSeeded { get; set; } = false;
+    public long? Bytes { get; set; }
+    public string? FileSize { get { return Bytes > 0 ? FileUtils.FileSizeFormatter(Bytes.Value): "0 Bytes"; } }
+    public string? Extension { get; set; }
+    public int? FolderCount { get; set; } = 0;
+    public List<FileOrFolder>? FilesOrFolders { get; set; }
+
     /// <summary>
     /// Should never be invoked.
     /// Serves only the purpose of being the binding target for Deserialize. 
@@ -25,67 +39,77 @@ public class FileOrFolder
         switch (fileFolderSwitch)
         {
             case FileFolderSwitch.Folder:
-                Files = new List<FileOrFolder>();
+                Bytes = fileSizeBytes ?? 0;
+                FilesOrFolders = new List<FileOrFolder>();
                 break;
             case FileFolderSwitch.File:
                 Bytes = fileSizeBytes ?? 0;
-                FileSize = FileUtils.FileSizeFormatter(Bytes.Value);
-                Extension = TagFileType(FullPath);
-                Classification = Classify(folderPath);
+                Extension = Path.GetExtension(Name);
                 break;
         }
     }
-    public string FullPath { get; set; } = string.Empty;
-    public string Name { get; set; } = string.Empty;
-    public FileFolderSwitch FileFolderSwitch { get; set; } = FileFolderSwitch.Folder;
-    public int Depth { get; set; } = 0;
-    public string Hash { get; set; } = string.Empty;
-    public bool IsBeingSeeded { get; set; } = false;
-    public long? Bytes { get; set; }    
-    public string? FileSize { get; set; }
-    public string? Extension { get; set; }
-    public SafeForWork Classification { get; set; }
-    public int? FolderCount { get; set; }
-    public List<FileOrFolder>? Files { get; set; }
 
+    #region MainFeatures
 
-    
-
-    /// <summary>
-    /// Returns a tag(Extension) to the File regarding it's contents (using the magic bytes)
-    /// or tags it as an unrecognized (which means Potential Virus or just unable to detect using the magic bytes) therefore unsafe.
-    /// </summary>
-    /// <param name="path">The pathway to the specific file.</param>
-    /// <returns>The extension recognized on the file.</returns>
-    public string TagFileType(string path)
+    public FileOrFolder? GetInnerFileOrFolder(string path)
     {
-        using (var fileStream = File.OpenRead(path))
-        {
-            var isRecognizableType = FileTypeValidator.IsTypeRecognizable(fileStream);
-
-            if (!isRecognizableType)
-            {
-                return $"Unrecognizable({Name.Split(".")[Name.Split(".").Length-1]})";
-            }
-
-            IFileType fileType = FileTypeValidator.GetFileType(fileStream);
-            return $"{fileType.Name}({fileType.Extension.ToLowerInvariant()})";
+        if (this.FullPath.Equals(path)) { 
+            return this; 
         }
+        else
+        {
+            if(this.FilesOrFolders?.Count > 0)
+            {
+                foreach(var file in this.FilesOrFolders)
+                {
+                    var match = file.GetInnerFileOrFolder(path);
+                    if (match != null)
+                    {
+                        return match;
+                    };
+                }
+            }
+        }
+        return null;
     }
+
+    public List<FileOrFolder> GetInnerFiles(bool includeInnerFolderFiles)
+    {
+        List<FileOrFolder> result = new();
+        if (this.FileFolderSwitch.Equals(FileFolderSwitch.File))
+        {
+            result.Add(this);
+        }
+        else
+        {
+            var innerFiles = FilesOrFolders?.Where(f => f.FileFolderSwitch.Equals(FileFolderSwitch.File)).ToList();
+            var innerFolders = FilesOrFolders?.Where(f => f.FileFolderSwitch.Equals(FileFolderSwitch.Folder)).ToList();
+            foreach (var file in innerFiles) { result.Add(file); }
+            if (includeInnerFolderFiles)
+            {
+                foreach(var folder in innerFolders) { result.AddRange(folder.GetInnerFiles(includeInnerFolderFiles)); }
+            }
+        }
+        return result;
+    }
+
+    #endregion;
+
+    #region ExtraFeatures
 
     /// <summary>
     /// Classifies a File as Porn, Hentai, Sexy, or Safe for Work
     /// </summary>
     /// <param name="path"></param>
     /// <returns></returns>
-    private SafeForWork Classify(string path)
+    private SafeForWork Classify()
     {
         try
         {
             SafeForWork result;
             var nsfwSpy = new NsfwSpy();
-            var fileBytes = File.ReadAllBytes(path);
-            var info = new FileInfo(path);
+            var fileBytes = File.ReadAllBytes(FullPath);
+            var info = new FileInfo(FullPath);
             var matches = Regex.Match(Extension, @"\(([^)]+)\)");
 
             //Captures[1] contains the value between the parentheses
@@ -116,11 +140,11 @@ public class FileOrFolder
                 case "png":
                 case "jpg":
                 case "webp":
-                    var evalImage = nsfwSpy.ClassifyImage(path);
+                    var evalImage = nsfwSpy.ClassifyImage(FullPath);
                     result =
-                        evalImage.Pornography > 0.5 ? SafeForWork.Pornography
-                        : evalImage.Hentai > 0.5 ? SafeForWork.Hentai
-                        : evalImage.Sexy > 0.5 ? SafeForWork.Sexy
+                        evalImage.Pornography > 0.85 ? SafeForWork.Pornography
+                        : evalImage.Hentai > 0.85 ? SafeForWork.Hentai
+                        : evalImage.Sexy > 0.85 ? SafeForWork.Sexy
                         : SafeForWork.Safe;
                     break;
                 default:
@@ -131,9 +155,10 @@ public class FileOrFolder
         }
         catch (Exception ex)
         {
-            ManagerApplicationConsole.WriteException("FolderDto.Classify", $"Wasn't able to classify the file at {path}.", ex);
+            ManagerApplicationConsole.WriteException("FolderDto.Classify", $"Wasn't able to classify the file at {FullPath}.", ex);
             return SafeForWork.Unclassified;
         }
 
     }
+    #endregion;
 }

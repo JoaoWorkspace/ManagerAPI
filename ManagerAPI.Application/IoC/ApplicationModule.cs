@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Cqrs.Commands;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +25,7 @@ public class ApplicationModule : Module
             .As(t =>
             {
                 return t.GetInterfaces()
-                         .Where(a => a.IsClosedTypeOf(typeof(ICommandHandler<,>)));
+                         .Where(a => a.IsClosedTypeOf(typeof(IRequestHandler<,>)));
             });
 
         //// register mediatr behaviors for commands

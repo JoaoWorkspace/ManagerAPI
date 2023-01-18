@@ -1,6 +1,8 @@
 ﻿using ManagerAPI.ExceptionHandling;
 using ManagerAPI.Request;
+using ManagerAPI.Settings;
 using ManagerApplication.FileArea.Models;
+using Microsoft.Extensions.Options;
 
 namespace ManagerAPI.Caching;
 /// <summary>
@@ -10,11 +12,11 @@ namespace ManagerAPI.Caching;
 /// </summary>
 public class Cache : ICache
 {
-    public string CacheFolder = AppDomain.CurrentDomain.BaseDirectory;
+    public string CacheFolder { get; set; }
     public Dictionary<StorageDrive, string> DRIVE_FOLDER { get; set; } = new Dictionary<StorageDrive, string>();
-    public Cache(IConfiguration configuration)
+    public Cache(IConfiguration configuration, IOptions<CacheSettings> settings)
     {
-        CacheFolder = configuration.GetSection("CacheSettings:Folder").Value ?? CacheFolder;
+        CacheFolder = settings.Value.Folder;
         InitializeCache();
     }
     /// <summary>

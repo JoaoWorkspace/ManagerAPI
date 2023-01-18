@@ -36,7 +36,7 @@ public static class TorrentUtils
             {
                 ManagerApplicationConsole.WriteInformation("TorrentUtils.MatchQbitTorrentsWithFileTorrents",
                $"Found a match!\n" +
-               $"Name={matchingFile.Name} Hash={matchingFile.Hash} Extension={matchingFile.Extension}");
+               $"Name={matchingFile.Name} Extension={matchingFile.Extension}");
             }
             torrent.TorrentFile = matchingFile;
         }
@@ -92,7 +92,7 @@ public static class TorrentUtils
     public static List<FileOrFolder> GetAllTorrentsInDirectoryRecursive(FileOrFolder directory)
     {
         List<FileOrFolder> torrentFiles = new List<FileOrFolder>();
-        foreach (FileOrFolder file in directory.Files)
+        foreach (FileOrFolder file in directory.FilesOrFolders)
         {
             if (file.FileFolderSwitch == FileFolderSwitch.File)
             {
@@ -152,7 +152,7 @@ public static class TorrentUtils
             {
                 try
                 {
-                    folder.Files?.Add(GetDirectoryAsFolder(d, folder.Depth + 1, depthLimit));
+                    folder.FilesOrFolders?.Add(GetDirectoryAsFolder(d, folder.Depth + 1, depthLimit));
                     folder.FolderCount++;
                 }
                 catch (Exception ex)
@@ -164,7 +164,8 @@ public static class TorrentUtils
         }
         foreach (FileInfo f in directory.GetFiles())
         {
-            folder.Files?.Add(new FileOrFolder(FileFolderSwitch.File, f.FullName, f.Name, folder.Depth, fileSizeBytes: f.Length));
+            folder.FilesOrFolders?.Add(new FileOrFolder(FileFolderSwitch.File, f.FullName, f.Name, folder.Depth, fileSizeBytes: f.Length));
+            folder.Bytes += f.Length;
         }
         return folder;
     }

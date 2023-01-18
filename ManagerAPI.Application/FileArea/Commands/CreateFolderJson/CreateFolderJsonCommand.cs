@@ -3,7 +3,7 @@ using ManagerAPI.Domain.Models.Enum;
 
 namespace ManagerAPI.Application.FileArea.Commands.CreateFolderJson;
 
-public class CreateFolderJsonCommand : FileCommand<FileOrFolder>
+public class CreateFolderJsonCommand : FileCommand<string >
 {
     public int MaxDepth { get; set; } = 0;
     public string PathToSaveJson { get; set; }

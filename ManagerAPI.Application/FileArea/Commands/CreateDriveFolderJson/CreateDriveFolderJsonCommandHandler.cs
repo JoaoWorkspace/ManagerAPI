@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Cqrs.Domain;
 using ManagerAPI.Application.FileArea.Models;
 using ManagerAPI.Application.FileArea.Models.Enums;
 using MediatR;
@@ -13,7 +12,6 @@ public class CreateDriveFolderJsonCommandHandler : IRequestHandler<CreateDriveFo
     public CreateDriveFolderJsonCommandHandler(
         IMediator mediator,
         IMapper mapper
-        //ITorrentRepository torrentRepository
         )
     {
         this.mediator = mediator;
@@ -48,17 +46,18 @@ public class CreateDriveFolderJsonCommandHandler : IRequestHandler<CreateDriveFo
     /// <param name="depth">Sets the current folder/file's depth - Should always be 0 when calling this method, since the only time it's not 0 is when the method calls itself recurvsively.</param>
     /// <param name="depthLimit">How many subfolder levels we are willing to dig into. null = No Depth</param>
     /// <returns></returns>
-    public async Task<Models.FileOrFolder> GetDirectoryAsFolder(DirectoryInfo directory, int depth = 0, int depthLimit = 0)
+    public async Task<FileOrFolder> GetDirectoryAsFolder(DirectoryInfo directory, int depth = 0, int depthLimit = 0)
     {
-        Models.FileOrFolder folder = new(Models.Enums.FileFolderSwitch.Folder, directory.FullName, directory.Name, depth);
+        FileOrFolder folder = new(FileFolderSwitch.Folder, directory.FullName, directory.Name, depth);
         if (depthLimit == 0 || depthLimit > folder.Depth)
         {
             foreach (DirectoryInfo d in directory.EnumerateDirectories())
             {
                 try
                 {
-                    folder.Files?.Add(await GetDirectoryAsFolder(d, folder.Depth + 1, depthLimit));
+                    folder.FilesOrFolders?.Add(await GetDirectoryAsFolder(d, folder.Depth + 1, depthLimit));
                     folder.FolderCount++;
+                    folder.Bytes += folder.FilesOrFolders.Single(folder => folder.FullPath == d.FullName).Bytes;
                 }
                 catch (Exception ex)
                 {
@@ -69,7 +68,8 @@ public class CreateDriveFolderJsonCommandHandler : IRequestHandler<CreateDriveFo
         }
         foreach (FileInfo f in directory.GetFiles())
         {
-            folder.Files?.Add(new FileOrFolder(FileFolderSwitch.File, f.FullName, f.Name, folder.Depth, fileSizeBytes: f.Length));
+            folder.FilesOrFolders?.Add(new FileOrFolder(FileFolderSwitch.File, f.FullName, f.Name, folder.Depth, fileSizeBytes: f.Length));
+            folder.Bytes += f.Length;
         }
         return folder;
     }
