@@ -1,5 +1,4 @@
 using ManagerAPI.Application.TorrentArea;
-using ManagerAPI.Application.TorrentArea.Commands;
 using ManagerAPI.Application.TorrentArea.Commands.AddTorrentsFromFile;
 using ManagerAPI.Application.TorrentArea.Commands.EditTorrent;
 using ManagerAPI.Application.TorrentArea.Commands.GetDetailedTorrent;
@@ -8,19 +7,14 @@ using ManagerAPI.Application.TorrentArea.Commands.GetTorrentClientSummary;
 using ManagerAPI.Application.TorrentArea.Commands.GetTorrentsAndTorrentFile;
 using ManagerAPI.Application.TorrentArea.Commands.GetUnregisteredTorrent;
 using ManagerAPI.Application.TorrentArea.Commands.SearchTorrent;
-using ManagerAPI.Application.FileArea.Models;
 using ManagerAPI.Application.TorrentArea.Models;
 
 using ManagerAPI.Caching;
 using ManagerAPI.ExceptionHandling;
 using ManagerAPI.Request;
 using ManagerAPI.Response;
-using ManagerApplication.FileArea.Models;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Converters;
 using QBittorrent.Client;
-using System.Text.Json.Serialization;
-using ManagerAPI.Application.FileArea.Commands.CreateDriveFolderJson;
 using ManagerAPI.Application.FileArea;
 using ManagerAPI.Application.FileArea.Commands.GetFilesFromFolder;
 using ManagerAPI.Application.TorrentArea.Models.Enum;
@@ -100,7 +94,7 @@ namespace ManagerAPI.Controllers.v1
         {
             try
             {
-                var torrentList = await torrentService.GetAllActiveTorrents(new SearchTorrentCommand(TorrentListFilter.Active), cancellationToken);
+                var torrentList = await torrentService.GetAllActiveTorrents(new SearchTorrentCommand(TorrentListFilter.Paused), cancellationToken);
                 return new TorrentManagerOutput(Ok(torrentList));
             }
             catch (Exception ex)

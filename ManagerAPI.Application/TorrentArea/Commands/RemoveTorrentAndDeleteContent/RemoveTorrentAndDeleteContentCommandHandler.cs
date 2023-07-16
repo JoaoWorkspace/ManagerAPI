@@ -50,7 +50,7 @@ public class RemoveTorrentAndDeleteContentCommandHandler : IRequestHandler<Remov
             {
                 if (request.AlsoDeleteTorrentFile)
                 {
-                    result.Add($"{torrent.Hash}", $"The torrent {torrent.Name} did not have a TorrentFile on any of the given directories {request.FileOrFolderPaths}, which was set as a requirement before deleting, so it was skipped.");
+                    result.Add($"{torrent.Hash}", $"The torrent {torrent.Name} did not have a TorrentFile, which was set as a requirement before deleting, so it was skipped.");
                 }
             }
 

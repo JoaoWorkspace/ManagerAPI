@@ -1,22 +1,22 @@
-﻿using Cqrs.Commands;
-using Cqrs.Messages;
-using ManagerAPI.Domain.Models.Enum;
-using MediatR;
-using Newtonsoft.Json.Converters;
-using System.Text.Json.Serialization;
+﻿//using Cqrs.Commands;
+//using Cqrs.Messages;
+//using ManagerAPI.Domain.Models.Enum;
+//using MediatR;
+//using Newtonsoft.Json.Converters;
+//using System.Text.Json.Serialization;
 
-namespace ManagerAPI.Application.TorrentArea.Commands;
+//namespace ManagerAPI.Application.TorrentArea.Commands;
 
-public class TorrentCommand<TResponse> : IRequest<TResponse>
-{
-    public ManagedAction Action { get; set; }
-    public List<string>? FileOrFolderPaths { get; set; }
-    public List<BinaryData>? Data { get; set; }
+//public class TorrentCommand<TResponse> : IRequest<TResponse>
+//{
+//    public ManagedAction Action { get; set; }
+//    public List<string>? FileOrFolderPaths { get; set; }
+//    public List<BinaryData>? Data { get; set; }
 
-    public TorrentCommand(ManagedAction action, List<string>? fileOrFolderPaths = null, List<BinaryData>? data = null)
-    {
-        Action = action;
-        FileOrFolderPaths = fileOrFolderPaths;
-        Data = data;
-    }
-}
+//    public TorrentCommand(ManagedAction action, List<string>? fileOrFolderPaths = null, List<BinaryData>? data = null)
+//    {
+//        Action = action;
+//        FileOrFolderPaths = fileOrFolderPaths;
+//        Data = data;
+//    }
+//}

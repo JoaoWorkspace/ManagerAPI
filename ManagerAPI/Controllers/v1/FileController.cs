@@ -111,7 +111,7 @@ namespace ManagerAPI.Controllers.v1
                 var result = await fileService.OpenFileAsync(new OpenFileCommand(fullPath), cancellationToken);
                 return new FileManagerOutput(Ok(result), start);
             }
-            catch(Exception ex) 
+            catch (Exception ex)
             {
                 ManagerConsole.WriteException("CloseFileProcessIfExists", $"Failed to close a proocess including the file {fullPath}.", ex);
                 return new FileManagerOutput(BadRequest(ex.Message), start);
@@ -126,7 +126,7 @@ namespace ManagerAPI.Controllers.v1
             DateTime start = DateTime.UtcNow;
             try
             {
-                
+
                 var result = await fileService.GetAllProcessesUsingPathAsync(new GetAllProcessesUsingPathQuery(await cacheService.GetAllDrives(cancellationToken), path), cancellationToken);
                 return new FileManagerOutput(Ok(result), start);
 

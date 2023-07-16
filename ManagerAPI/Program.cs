@@ -1,14 +1,11 @@
-using Swashbuckle.AspNetCore.Swagger;
 using Newtonsoft.Json.Converters;
-using ManagerAPI.Application.TorrentArea;
-using MediatR;
 using NsfwSpyNS;
 using ManagerAPI.Caching;
-using System.Reflection;
 using ManagerAPI.Startup;
 using QBittorrent.Client;
 using ManagerAPI.Settings;
 using ManagerAPI.Application.FileArea;
+using ManagerAPI.Application.TorrentArea;
 
 #region builder
 
@@ -27,7 +24,6 @@ builder.Services.AddSwaggerGenNewtonsoftSupport();
 ////
 ///
 //
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -59,20 +55,22 @@ builder.Services.AddSingleton<IQBittorrentClient>(new QBittorrentClient(new Uri(
 ///
 //
 
+//Also necessary to register assemblies in all projects associated with our API (otherwise MediatR cannot properly detect the CommandHandlers from other Assemblies)
+builder.Services.ConfigureManagerAPIMicroservice(builder);
 
 //
 ///
 ////
 //Advanced - Register NsfwSpy so we can inject it into the controllers
 builder.Services.AddScoped<INsfwSpy, NsfwSpy>();
-//Also necessary to register MediatR on all assemblies (by Reflection)
-builder.Services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies().Where(a => !a.IsDynamic).ToArray());
-//Also necessary to register assemblies in all projects associated with our API (otherwise MediatR cannot properly detect the CommandHandlers from other Assemblies)
-builder.Services.ConfigureManagerAPIMicroservice(builder);
 //End of Advanced
 ////
 ///
 //
+
+
+//B:\Rocky.Balboa.2006.BluRay.Remux.1080p.AVC.DTS-HD.MA.5.1-TDD.mkv
+
 
 #endregion builder
 
@@ -85,7 +83,7 @@ app.UseSwaggerUI(
    ///
    ////
    //Advanced - This little piece of code greatly enhances performance when returning large amounts of data
-    //Configuration: AppSettings.json
+   //Configuration: AppSettings.json
    config =>
    config.ConfigObject.AdditionalItems["syntaxHighlight"] = new Dictionary<string, object>
    {

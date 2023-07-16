@@ -13,7 +13,7 @@ namespace ManagerAPI.Application.FileArea.Mapping
     {
         public FileMappingProfile()
         {
-            CreateMap<Process, RunningProcess>().ReverseMap();
+            //CreateMap<Process, RunningProcess>().ReverseMap();
         }
     }
 }

@@ -25,7 +25,7 @@ public class GetTorrentsAndTorrentFileCommandHandler : IRequestHandler<GetTorren
     public async Task<List<SimpleTorrentInfo>> Handle(GetTorrentsAndTorrentFileCommand request, CancellationToken cancellationToken)
     {
         var filteredTorrents =  await GetFilteredQbitTorrents(request, cancellationToken);
-        var torrentFiles = TorrentUtils.GetAllTorrentFilesFromTorrentDirectoryList(request.FileOrFolderPaths);
+        var torrentFiles = TorrentUtils.GetAllTorrentFilesFromTorrentDirectoryList(request.TorrentFolderPaths);
         TorrentUtils.MatchQbitTorrentsWithFileTorrents(filteredTorrents, torrentFiles);
         return filteredTorrents;
     }

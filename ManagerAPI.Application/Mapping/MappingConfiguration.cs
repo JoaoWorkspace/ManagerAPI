@@ -1,4 +1,5 @@
 ﻿using ManagerAPI.Application.FileArea.Mapping;
+using ManagerAPI.Application.TorrentArea.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,8 +14,8 @@ namespace ManagerAPI.Application.Mapping
         {
             return new AutoMapper.Profile[]
             {
-                new FileMappingProfile()
-                //new TorrentMappingProfile()
+                new FileMappingProfile(),
+                new TorrentMappingProfile()
             };
         }
     }

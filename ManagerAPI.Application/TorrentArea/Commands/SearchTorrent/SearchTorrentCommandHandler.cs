@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
+using Autofac;
 using ManagerAPI.Application.ExceptionHandling;
 using ManagerAPI.Application.FileArea.Models;
-using ManagerAPI.Application.TorrentArea.Models;
 using MediatR;
 using QBittorrent.Client;
 
