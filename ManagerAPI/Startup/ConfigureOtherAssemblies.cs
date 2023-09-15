@@ -2,8 +2,14 @@
 using Autofac.Extensions.DependencyInjection;
 using ManagerAPI.Application.IoC;
 using ManagerAPI.Domain.IoC;
+using ManagerAPI.Persistence.Database;
 using ManagerAPI.Persistence.IoC;
+using ManagerAPI.Persistence.Settings;
+using ManagerAPI.Settings;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using Raven.Client.Documents;
 
 namespace ManagerAPI.Startup
 {
@@ -24,10 +30,7 @@ namespace ManagerAPI.Startup
 
                 //containerBuilder.Register(c =>
                 //{
-
                 //    var optionsBuilderPostgreContext = new DbContextOptionsBuilder<PostgreContext>().UseNpgsql(builder.Configuration.GetConnectionString("PostgreDatabase"));
-
-                //    var optionsBuilderMongoContext = new DbContextOptionsBuilder<MongoContext>().usen(builder.Configuration.GetConnectionString("MongoDatabase"));
 
                 //    return optionsBuilder.Options;
                 //});
@@ -35,7 +38,12 @@ namespace ManagerAPI.Startup
             #endregion Registering Other Layers
 
             #region  Register all Databases
+
             //Registering a normal SQLServer (PostegreSQL in this case) database
+            var serviceCollection = services.BuildServiceProvider();
+
+            var databaseSettings = serviceCollection
+               .GetRequiredService<IOptions<DatabaseSettings>>();
             //services.AddDbContextFactory<CarDatabaseContext, CarDatabaseContextFactory>();
 
             //Registering a CosmosDB Document Database using Configuration from AppSettings
@@ -47,6 +55,27 @@ namespace ManagerAPI.Startup
 
             //    options.UseCosmos(cosmosSettings.EndPoint, cosmosSettings.AccessKey, cosmosSettings.DatabaseName);
             //});
+
+            //Registering a RavenDB Document Database using Configuration from AppSettings
+            if (databaseSettings.Value.RavenDB.IsSetup)
+            {
+                services.AddSingleton(new IdentityDocumentStoreHolder(databaseSettings));
+            }
+
+            builder.Services.AddSingleton<IDocumentStore>((serviceProvider) =>
+            {
+                var databaseSettings = serviceProvider.GetService<IOptions<DatabaseSettings>>().Value;
+                return IdentityDocumentStoreHolder.Store;
+
+            });
+
+            //services.AddDbContextFactory<IdentityDocumentStoreHolder>((options) =>
+            //{
+            //    options.
+
+            //    options.UseCosmos(cosmosSettings.EndPoint, cosmosSettings.AccessKey, cosmosSettings.DatabaseName);
+            //});
+
             #endregion  Register all Databases
 
             //

@@ -57,7 +57,7 @@ public class CreateFolderJsonCommandHandler : IRequestHandler<CreateFolderJsonCo
     /// </summary>
     /// <param name="directory">The base folder</param>
     /// <param name="depth">Sets the current folder/file's depth - Should always be 0 when calling this method, since the only time it's not 0 is when the method calls itself recurvsively.</param>
-    /// <param name="depthLimit">How many subfolder levels we are willing to dig into. null = No Depth</param>
+    /// <param name="depthLimit">How many subfolder levels we are willing to dig into. 0 = No Depth</param>
     /// <returns></returns>
     public async Task<FileOrFolder> GetDirectoryAsFolder(DirectoryInfo directory, int depth = 0, int depthLimit = 0)
     {

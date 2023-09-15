@@ -2,30 +2,44 @@
 using Cqrs.Domain;
 using ManagerAPI.Application.ExceptionHandling;
 using ManagerAPI.Application.TorrentArea.Models;
+using ManagerAPI.Domain.Repositories;
 using MediatR;
 using Newtonsoft.Json.Linq;
 using QBittorrent.Client;
+using Raven.Client.Documents;
+using Raven.Client.Documents.Session;
 
 namespace ManagerAPI.Application.TorrentArea.Commands.EditTorrent;
 
-public class EditTorrentCommandHandler : IRequestHandler<CreateUserCommand, List<string>>
+public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, List<string>>
 {
     private readonly IMediator mediator;
     private readonly IMapper mapper;
     private readonly IQBittorrentClient client;
-    public EditTorrentCommandHandler(
+    private readonly IDocumentStore documentStore;
+    private readonly IUserRepository userRepository;
+    public CreateUserCommandHandler(
         IMediator mediator,
         IMapper mapper,
-        IQBittorrentClient client
+        IQBittorrentClient client,
+        IDocumentStore documentStore,
+        IUserRepository userRepository
         )
     {
         this.mediator = mediator;
         this.mapper = mapper;
         this.client = client;
+        this.documentStore = documentStore;
+        this.userRepository = userRepository;
     }
 
     public async Task<List<string>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
+        var user = "";
+        using(var session = documentStore.OpenAsyncSession())
+        {
+
+        }
         var torrents = await EditQbitTorrents(request, cancellationToken);
         return torrents;
     }

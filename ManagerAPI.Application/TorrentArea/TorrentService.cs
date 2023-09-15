@@ -5,6 +5,7 @@ using ManagerAPI.Application.TorrentArea.Commands.GetLessDetailedTorrent;
 using ManagerAPI.Application.TorrentArea.Commands.GetTorrentClientSummary;
 using ManagerAPI.Application.TorrentArea.Commands.GetTorrentsAndTorrentFile;
 using ManagerAPI.Application.TorrentArea.Commands.GetUnregisteredTorrent;
+using ManagerAPI.Application.TorrentArea.Commands.OpenTorrentFiles;
 using ManagerAPI.Application.TorrentArea.Commands.RemoveTorrentAndDeleteContent;
 using ManagerAPI.Application.TorrentArea.Commands.SearchTorrent;
 using ManagerAPI.Application.TorrentArea.Models;
@@ -24,6 +25,11 @@ public class TorrentService : ITorrentService
         this.client = client;
     }
 
+    public async Task<List<BencodeNET.Torrents.Torrent>> OpenTorrentFiles(OpenTorrentFilesCommand command, CancellationToken cancellationToken)
+    {
+        return await mediator.Send(command, cancellationToken);
+    }
+         
     public async Task<TorrentSummaryInfo> GetTorrentClientSummaryAsync(GetTorrentClientSummaryCommand command, CancellationToken cancellationToken)
     {
         return await mediator.Send(command, cancellationToken);

@@ -101,6 +101,14 @@ namespace ManagerAPI.Controllers.v1
             return new FileManagerOutput(Ok(result), start);
         }
 
+        [HttpDelete("DeleteFiles")]
+        public async Task<FileManagerOutput> DeleteFiles(string folderPath, CancellationToken cancellationToken)
+        {
+            DateTime start = DateTime.UtcNow;
+            //TO BE IMPLEMENTED
+            return new FileManagerOutput(Ok(null), start);
+        }
+
         [HttpPut("OpenFile")]
         public async Task<FileManagerOutput> OpenFile(string fullPath, CancellationToken cancellationToken)
         {

@@ -5,6 +5,7 @@ using ManagerAPI.Application.TorrentArea.Commands.GetLessDetailedTorrent;
 using ManagerAPI.Application.TorrentArea.Commands.GetTorrentClientSummary;
 using ManagerAPI.Application.TorrentArea.Commands.GetTorrentsAndTorrentFile;
 using ManagerAPI.Application.TorrentArea.Commands.GetUnregisteredTorrent;
+using ManagerAPI.Application.TorrentArea.Commands.OpenTorrentFiles;
 using ManagerAPI.Application.TorrentArea.Commands.SearchTorrent;
 using ManagerAPI.Application.TorrentArea.Models;
 using QBittorrent.Client;
@@ -13,6 +14,7 @@ namespace ManagerAPI.Application.TorrentArea;
 
 public interface ITorrentService
 {
+    Task<List<BencodeNET.Torrents.Torrent>> OpenTorrentFiles(OpenTorrentFilesCommand openTorrentFileCommand, CancellationToken cancellationToken);
     Task<TorrentSummaryInfo> GetTorrentClientSummaryAsync(GetTorrentClientSummaryCommand command, CancellationToken cancellationToken);
     Task<List<string>> GetAllActiveTorrents(SearchTorrentCommand command, CancellationToken cancellationToken);
     Task<List<string>> GetAllInactiveTorrents(SearchTorrentCommand command, CancellationToken cancellationToken);

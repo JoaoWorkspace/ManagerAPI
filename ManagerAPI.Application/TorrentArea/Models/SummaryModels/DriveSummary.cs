@@ -1,4 +1,5 @@
-﻿using ManagerAPI.Application.FileArea;
+﻿using ManagerAPI.Application.ExceptionHandling;
+using ManagerAPI.Application.FileArea;
 using ManagerApplication.FileArea.Models;
 using QBittorrent.Client;
 using System.ComponentModel;
@@ -43,25 +44,31 @@ public class DriveSummary
     {
         foreach (StorageDrive drive in allDrives)
         {
-            DriveInfo driveInfo = new DriveInfo(drive.ToString());
-            List<TorrentInfo> driveTorrents = allTorrents
-                .FindAll(torrent => torrent.SavePath.StartsWith(drive.ToString()))
-                .DistinctBy(torrent => new { torrent.Name, torrent.TotalSize})
-                .ToList();
-            DriveTorrents.Add(drive, driveTorrents);
-            TorrentsPerDrive.Add(drive, driveTorrents.Count());
-            long totalSeededBytesInDrive = driveTorrents.Sum(t => t.CompletedSize) ?? 0L;   
-            SeedSizeBytesPerDrive.Add(drive, totalSeededBytesInDrive);
-            SeedSizePerDrive.Add(drive, $"{FileUtils.FileSizeFormatter(totalSeededBytesInDrive)} " +
-                $"({string.Format("{0:n2}",(double.Parse(totalSeededBytesInDrive.ToString())/double.Parse(TotalBytesInTorrentClient.ToString()))*100.0)}%) " +
-                $"which is {string.Format("{0:n2}", (double.Parse(totalSeededBytesInDrive.ToString())/double.Parse((driveInfo.TotalSize-driveInfo.AvailableFreeSpace).ToString()))*100.0)}% " +
-                $"of the {FileUtils.FileSizeFormatter(driveInfo.TotalSize - driveInfo.AvailableFreeSpace)} occupied drive space, " +
-                $"leaving only {FileUtils.FileSizeFormatter(driveInfo.AvailableFreeSpace)} of space for new torrents");
-            DriveTorrentHashes.Add(drive, driveTorrents.Select(torrent => torrent.Hash).ToList());
+            try
+            {
+                DriveInfo driveInfo = new DriveInfo(drive.ToString());
+                List<TorrentInfo> driveTorrents = allTorrents
+                    .FindAll(torrent => torrent.SavePath.StartsWith(drive.ToString()))
+                    .DistinctBy(torrent => new { torrent.Name, torrent.TotalSize })
+                    .ToList();
+                DriveTorrents.Add(drive, driveTorrents);
+                TorrentsPerDrive.Add(drive, driveTorrents.Count());
+                long totalSeededBytesInDrive = driveTorrents.Sum(t => t.CompletedSize) ?? 0L;
+                SeedSizeBytesPerDrive.Add(drive, totalSeededBytesInDrive);
+                SeedSizePerDrive.Add(drive, $"{FileUtils.FileSizeFormatter(totalSeededBytesInDrive)} " +
+                    $"({string.Format("{0:n2}", (double.Parse(totalSeededBytesInDrive.ToString()) / double.Parse(TotalBytesInTorrentClient.ToString())) * 100.0)}%) " +
+                    $"which is {string.Format("{0:n2}", (double.Parse(totalSeededBytesInDrive.ToString()) / double.Parse((driveInfo.TotalSize - driveInfo.AvailableFreeSpace).ToString())) * 100.0)}% " +
+                    $"of the {FileUtils.FileSizeFormatter(driveInfo.TotalSize - driveInfo.AvailableFreeSpace)} occupied drive space, " +
+                    $"leaving only {FileUtils.FileSizeFormatter(driveInfo.AvailableFreeSpace)} of space for new torrents");
+                DriveTorrentHashes.Add(drive, driveTorrents.Select(torrent => torrent.Hash).ToList());
+                SeedSizePerDrive = SeedSizePerDrive
+                    .OrderByDescending(pair => TorrentUtils.GetInnerPercentage(pair.Value))
+                    .ToDictionary(pair => pair.Key, pair => pair.Value);
+            }catch(Exception ex)
+            {
+                ManagerApplicationConsole.BuildExceptionMessage($"There was an error getting a summary for drive {drive}", ex);
+            }
         }
-        SeedSizePerDrive = SeedSizePerDrive
-            .OrderByDescending(pair => TorrentUtils.GetInnerPercentage(pair.Value))
-            .ToDictionary(pair => pair.Key, pair => pair.Value);
     }
 
 

@@ -53,7 +53,7 @@ public static class ManagerConsole
     /// <param name="methodDomain"></param>
     /// <param name="message"></param>
     /// <returns>A Message ready for the ManagerConsole to Write</returns>
-    public static string BuildMessage(string methodDomain, string message)
+    private static string BuildMessage(string methodDomain, string message)
     {
         return $"Invoker:{methodDomain} at {DateTime.UtcNow}\n{message}".Replace("\n", "\n\t");
     }
@@ -64,7 +64,7 @@ public static class ManagerConsole
     /// <param name="customMessage"></param>
     /// <param name="ex"></param>
     /// <returns>An Exception Message ready for the ManagerConsole to Write</returns>
-    public static string BuildExceptionMessage(string customMessage, Exception? ex = null)
+    private static string BuildExceptionMessage(string customMessage, Exception? ex = null)
     {
         string exception = ex == null ? string.Empty : $"\nReason: {ex}";
         return $"{customMessage}{exception}";

@@ -28,7 +28,7 @@ public class AddTorrentsFromFileCommandHandler : IRequestHandler<AddTorrentsFrom
     {
         foreach (int batch in Enumerable.Range(0, request.FileOrFolderPaths.Count()))
         {
-            var torrent = request.FileOrFolderPaths.Take(1).First();
+            var torrent = request.FileOrFolderPaths.Take(1).Single();
             request.FileOrFolderPaths.Remove(torrent);
             AddTorrentFilesRequest addTorrentsRequest = new AddTorrentFilesRequest(torrent)
             {

@@ -18,6 +18,7 @@ using QBittorrent.Client;
 using ManagerAPI.Application.FileArea;
 using ManagerAPI.Application.FileArea.Commands.GetFilesFromFolder;
 using ManagerAPI.Application.TorrentArea.Models.Enum;
+using ManagerAPI.Application.TorrentArea.Commands.OpenTorrentFiles;
 
 namespace ManagerAPI.Controllers.v1
 {
@@ -37,7 +38,14 @@ namespace ManagerAPI.Controllers.v1
             _logger = logger;
         }
 
-        [HttpPut("GetTorrentClientSummary")]
+        [HttpPost("OpenTorrentFiles")]
+        public async Task<TorrentManagerOutput> GetTorrentClientSummary(List<string> FileOrFolderPaths, CancellationToken cancellationToken)
+        {
+            List<BencodeNET.Torrents.Torrent> torrentFiles = await torrentService.OpenTorrentFiles(new OpenTorrentFilesCommand(FileOrFolderPaths), cancellationToken);
+            return new TorrentManagerOutput(Ok(torrentFiles));
+        }
+
+        [HttpPost("GetTorrentClientSummary")]
         public async Task<TorrentManagerOutput> GetTorrentClientSummary([FromForm] List<TorrentClientStats> showStats, CancellationToken cancellationToken)
         {
             TorrentSummaryInfo summary = await torrentService.GetTorrentClientSummaryAsync(new GetTorrentClientSummaryCommand(showStats), cancellationToken);
