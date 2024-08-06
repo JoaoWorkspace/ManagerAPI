@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using ManagerAPI.Application.FileArea.Models;
-using ManagerAPI.Application.FileArea.Models.Enums;
+using ManagerAPI.Application.MusicArea.Models;
+using ManagerAPI.Application.MusicArea.Models.Enums;
 using ManagerApplication.FileArea.Models;
 using MediatR;
 using Microsoft.Extensions.Caching.Memory;
@@ -13,7 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
-namespace ManagerAPI.Application.FileArea.Queries.GetAllProcessesUsingPath
+namespace ManagerAPI.Application.MusicArea.Queries.GetAllProcessesUsingPath
 {
     public class GetAllProcessesUsingPathQueryHandler : IRequestHandler<GetAllProcessesUsingPathQuery, Dictionary<string, List<RunningProcess>>>
     {

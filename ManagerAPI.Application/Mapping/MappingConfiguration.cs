@@ -1,4 +1,5 @@
 ﻿using ManagerAPI.Application.FileArea.Mapping;
+using ManagerAPI.Application.MusicArea.Mapping;
 using ManagerAPI.Application.TorrentArea.Mapping;
 using System;
 using System.Collections.Generic;

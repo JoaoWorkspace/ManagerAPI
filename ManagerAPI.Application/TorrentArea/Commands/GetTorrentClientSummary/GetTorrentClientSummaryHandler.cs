@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using ManagerAPI.Application.ExceptionHandling;
-using ManagerAPI.Application.FileArea;
+using ManagerAPI.Application.MusicArea;
 using ManagerAPI.Application.TorrentArea.Models;
 using ManagerAPI.Application.TorrentArea.Models.Enum;
 using ManagerAPI.Application.TorrentArea.Models.SummaryModels;

@@ -6,7 +6,7 @@ using QBittorrent.Client;
 using System;
 using System.Text.Json.Serialization;
 
-namespace ManagerAPI.Application.FileArea.Commands.GetFilesFromFolder;
+namespace ManagerAPI.Application.MusicArea.Commands.GetFilesFromFolder;
 
 public class GetFilesFromFolderCommand : FileCommand<List<string>>
 {

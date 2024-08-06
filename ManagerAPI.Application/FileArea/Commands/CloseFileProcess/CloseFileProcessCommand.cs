@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using System.Diagnostics;
 
-namespace ManagerAPI.Application.FileArea.Commands.CloseFileProcess;
+namespace ManagerAPI.Application.MusicArea.Commands.CloseFileProcess;
 
 public class CloseFileProcessCommand : IRequest<bool>
 {

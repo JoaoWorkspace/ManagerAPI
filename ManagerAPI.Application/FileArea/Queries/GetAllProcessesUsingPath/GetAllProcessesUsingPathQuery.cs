@@ -1,9 +1,9 @@
-﻿using ManagerAPI.Application.FileArea.Models;
+﻿using ManagerAPI.Application.MusicArea.Models;
 using ManagerApplication.FileArea.Models;
 using MediatR;
 using System.Diagnostics;
 
-namespace ManagerAPI.Application.FileArea.Queries.GetAllProcessesUsingPath
+namespace ManagerAPI.Application.MusicArea.Queries.GetAllProcessesUsingPath
 {
     public class GetAllProcessesUsingPathQuery : IRequest<Dictionary<string, List<RunningProcess>>>
     {

@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 
-namespace ManagerAPI.Application.FileArea
+namespace ManagerAPI.Application.MusicArea
 {
     public static class FileUtils
     {

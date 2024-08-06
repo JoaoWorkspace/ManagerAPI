@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 
-namespace ManagerAPI.Application.FileArea.Commands.GetFilesFromFolder;
+namespace ManagerAPI.Application.MusicArea.Commands.GetFilesFromFolder;
 
 public class GetFilesFromFolderCommandHandler : IRequestHandler<GetFilesFromFolderCommand, List<string>>
 {

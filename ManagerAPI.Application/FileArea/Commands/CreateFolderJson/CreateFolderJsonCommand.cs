@@ -1,7 +1,7 @@
-﻿using ManagerAPI.Application.FileArea.Models;
+﻿using ManagerAPI.Application.MusicArea.Models;
 using ManagerAPI.Domain.Models.Enum;
 
-namespace ManagerAPI.Application.FileArea.Commands.CreateFolderJson;
+namespace ManagerAPI.Application.MusicArea.Commands.CreateFolderJson;
 
 public class CreateFolderJsonCommand : FileCommand<string >
 {

@@ -4,7 +4,7 @@ using ManagerAPI.Caching;
 using ManagerAPI.Startup;
 using QBittorrent.Client;
 using ManagerAPI.Settings;
-using ManagerAPI.Application.FileArea;
+using ManagerAPI.Application.MusicArea;
 using ManagerAPI.Application.TorrentArea;
 using Microsoft.Data.SqlClient.Server;
 using Microsoft.Extensions.Options;

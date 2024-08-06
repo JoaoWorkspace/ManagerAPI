@@ -5,7 +5,7 @@ using MediatR;
 using Newtonsoft.Json.Converters;
 using System.Text.Json.Serialization;
 
-namespace ManagerAPI.Application.FileArea.Commands;
+namespace ManagerAPI.Application.MusicArea.Commands;
 
 public class FileCommand<TResponse> : IRequest<TResponse>
 {

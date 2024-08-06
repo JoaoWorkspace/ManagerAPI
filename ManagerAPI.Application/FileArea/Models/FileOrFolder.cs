@@ -1,12 +1,12 @@
 ﻿using ManagerAPI.Application.ExceptionHandling;
-using ManagerAPI.Application.FileArea.Models.Enums;
+using ManagerAPI.Application.MusicArea.Models.Enums;
 using ManagerAPI.Application.TorrentArea.Models.Enum;
 using NsfwSpyNS;
 using System.Linq;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 
-namespace ManagerAPI.Application.FileArea.Models;
+namespace ManagerAPI.Application.MusicArea.Models;
 
 public class FileOrFolder
 {

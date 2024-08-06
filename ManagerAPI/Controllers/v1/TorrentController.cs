@@ -15,8 +15,8 @@ using ManagerAPI.Request;
 using ManagerAPI.Response;
 using Microsoft.AspNetCore.Mvc;
 using QBittorrent.Client;
-using ManagerAPI.Application.FileArea;
-using ManagerAPI.Application.FileArea.Commands.GetFilesFromFolder;
+using ManagerAPI.Application.MusicArea;
+using ManagerAPI.Application.MusicArea.Commands.GetFilesFromFolder;
 using ManagerAPI.Application.TorrentArea.Models.Enum;
 using ManagerAPI.Application.TorrentArea.Commands.OpenTorrentFiles;
 

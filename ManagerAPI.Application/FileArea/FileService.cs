@@ -1,16 +1,16 @@
-﻿using ManagerAPI.Application.FileArea.Commands.GetFilesFromFolder;
-using ManagerAPI.Application.FileArea.Commands.CreateDriveFolderJson;
-using ManagerAPI.Application.FileArea.Commands.CreateFolderJson;
+﻿using ManagerAPI.Application.MusicArea.Commands.GetFilesFromFolder;
+using ManagerAPI.Application.MusicArea.Commands.CreateDriveFolderJson;
+using ManagerAPI.Application.MusicArea.Commands.CreateFolderJson;
 
-using ManagerAPI.Application.FileArea.Models;
+using ManagerAPI.Application.MusicArea.Models;
 using MediatR;
 using QBittorrent.Client;
 using System.Diagnostics;
-using ManagerAPI.Application.FileArea.Commands.CloseFileProcess;
-using ManagerAPI.Application.FileArea.Queries.GetAllProcessesUsingPath;
-using ManagerAPI.Application.FileArea.Commands.OpenFile;
+using ManagerAPI.Application.MusicArea.Commands.CloseFileProcess;
+using ManagerAPI.Application.MusicArea.Queries.GetAllProcessesUsingPath;
+using ManagerAPI.Application.MusicArea.Commands.OpenFile;
 
-namespace ManagerAPI.Application.FileArea;
+namespace ManagerAPI.Application.MusicArea;
 
 public class FileService : IFileService
 {

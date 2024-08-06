@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ManagerAPI.Application.FileArea.Models.Enums;
+namespace ManagerAPI.Application.MusicArea.Models.Enums;
 
 public enum FileFolderSwitch
 {

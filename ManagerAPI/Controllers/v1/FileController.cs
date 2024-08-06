@@ -1,17 +1,17 @@
-using ManagerAPI.Application.FileArea;
-using ManagerAPI.Application.FileArea.Commands.CreateDriveFolderJson;
-using ManagerAPI.Application.FileArea.Commands.CreateFolderJson;
-using ManagerAPI.Application.FileArea.Models;
+using ManagerAPI.Application.MusicArea;
+using ManagerAPI.Application.MusicArea.Commands.CreateDriveFolderJson;
+using ManagerAPI.Application.MusicArea.Commands.CreateFolderJson;
+using ManagerAPI.Application.MusicArea.Models;
 using ManagerAPI.Caching;
 using ManagerAPI.ExceptionHandling;
 using ManagerAPI.Request;
 using ManagerAPI.Response;
 using ManagerApplication.FileArea.Models;
 using Microsoft.AspNetCore.Mvc;
-using ManagerAPI.Application.FileArea.Commands.OpenFile;
+using ManagerAPI.Application.MusicArea.Commands.OpenFile;
 
-using ManagerAPI.Application.FileArea.Commands.CloseFileProcess;
-using ManagerAPI.Application.FileArea.Queries.GetAllProcessesUsingPath;
+using ManagerAPI.Application.MusicArea.Commands.CloseFileProcess;
+using ManagerAPI.Application.MusicArea.Queries.GetAllProcessesUsingPath;
 using System.Security.Principal;
 
 namespace ManagerAPI.Controllers.v1

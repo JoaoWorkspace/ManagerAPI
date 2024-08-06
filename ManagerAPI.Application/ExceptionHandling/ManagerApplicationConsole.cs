@@ -14,11 +14,9 @@ public static class ManagerApplicationConsole
     {
         WriteLayerMessage();
         var oldColor = Console.ForegroundColor;
-
         Console.ForegroundColor = ConsoleColor.DarkGreen;
         string message = BuildMessage(methodDomain, customMessage);
         Console.WriteLine($"[INFO]\t{message}");
-
         Console.ForegroundColor = oldColor;
     }
 
@@ -26,11 +24,9 @@ public static class ManagerApplicationConsole
     {
         WriteLayerMessage();
         var oldColor = Console.ForegroundColor;
-
         Console.ForegroundColor = ConsoleColor.DarkMagenta;
         string message = BuildMessage(methodDomain, customMessage);
         Console.WriteLine($"[WARN]\t{message}");
-
         Console.ForegroundColor = oldColor;
     }
 
@@ -38,12 +34,10 @@ public static class ManagerApplicationConsole
     {
         WriteLayerMessage();
         var oldColor = Console.ForegroundColor;
-
         Console.ForegroundColor = ConsoleColor.Red;
         string exceptionMessage = BuildExceptionMessage(customMessage, ex);
         string message = BuildMessage(methodDomain, exceptionMessage);
-        Console.WriteLine($"[ERROR]\t{message}");
-
+        Console.WriteLine($"[ERRO]\t{message}");
         Console.ForegroundColor = oldColor;
     }
 

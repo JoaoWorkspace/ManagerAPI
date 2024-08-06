@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using ManagerAPI.Application.FileArea.Models;
-using ManagerAPI.Application.FileArea.Models.Enums;
+using ManagerAPI.Application.MusicArea.Models;
+using ManagerAPI.Application.MusicArea.Models.Enums;
 using MediatR;
 using System.Diagnostics;
 
-namespace ManagerAPI.Application.FileArea.Commands.OpenFile;
+namespace ManagerAPI.Application.MusicArea.Commands.OpenFile;
 
 public class OpenFileCommandHandler : IRequestHandler<OpenFileCommand, ProcessStartInfo?>
 {

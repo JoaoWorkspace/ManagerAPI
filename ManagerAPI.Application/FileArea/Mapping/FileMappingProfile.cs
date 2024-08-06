@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using ManagerAPI.Application.FileArea.Models;
+using ManagerAPI.Application.MusicArea.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -13,7 +13,6 @@ namespace ManagerAPI.Application.FileArea.Mapping
     {
         public FileMappingProfile()
         {
-            //CreateMap<Process, RunningProcess>().ReverseMap();
         }
     }
 }

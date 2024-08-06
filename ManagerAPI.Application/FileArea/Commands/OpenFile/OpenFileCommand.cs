@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using System.Diagnostics;
 
-namespace ManagerAPI.Application.FileArea.Commands.OpenFile;
+namespace ManagerAPI.Application.MusicArea.Commands.OpenFile;
 
 public class OpenFileCommand : IRequest<ProcessStartInfo?>
 {

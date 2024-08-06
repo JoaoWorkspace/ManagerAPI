@@ -1,4 +1,4 @@
-﻿using ManagerAPI.Application.FileArea.Models;
+﻿using ManagerAPI.Application.MusicArea.Models;
 using ManagerAPI.Application.TorrentArea.Models;
 using ManagerAPI.ExceptionHandling;
 using ManagerAPI.Request;

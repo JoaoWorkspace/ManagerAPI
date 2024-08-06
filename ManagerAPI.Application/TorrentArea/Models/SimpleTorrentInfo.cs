@@ -1,4 +1,4 @@
-﻿using ManagerAPI.Application.FileArea.Models;
+﻿using ManagerAPI.Application.MusicArea.Models;
 using QBittorrent.Client;
 
 namespace ManagerAPI.Application.TorrentArea.Models;

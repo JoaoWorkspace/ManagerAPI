@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
 using Cqrs.Domain;
 using ManagerAPI.Application.ExceptionHandling;
-using ManagerAPI.Application.FileArea.Models;
-using ManagerAPI.Application.FileArea.Models.Enums;
+using ManagerAPI.Application.MusicArea.Models;
+using ManagerAPI.Application.MusicArea.Models.Enums;
 using MediatR;
 using System.Web.Http.Results;
 
-namespace ManagerAPI.Application.FileArea.Commands.CreateFolderJson;
+namespace ManagerAPI.Application.MusicArea.Commands.CreateFolderJson;
 
 public class CreateFolderJsonCommandHandler : IRequestHandler<CreateFolderJsonCommand, string>
 {

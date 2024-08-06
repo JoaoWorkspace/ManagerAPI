@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ManagerAPI.Application.FileArea.Models
+namespace ManagerAPI.Application.MusicArea.Models
 {
     public class RunningProcess
     {

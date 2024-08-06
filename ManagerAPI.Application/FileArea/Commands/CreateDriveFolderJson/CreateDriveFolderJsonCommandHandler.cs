@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using ManagerAPI.Application.FileArea.Models;
-using ManagerAPI.Application.FileArea.Models.Enums;
+using ManagerAPI.Application.MusicArea.Models;
+using ManagerAPI.Application.MusicArea.Models.Enums;
 using MediatR;
 
-namespace ManagerAPI.Application.FileArea.Commands.CreateDriveFolderJson;
+namespace ManagerAPI.Application.MusicArea.Commands.CreateDriveFolderJson;
 
 public class CreateDriveFolderJsonCommandHandler : IRequestHandler<CreateDriveFolderJsonCommand, FileOrFolder>
 {

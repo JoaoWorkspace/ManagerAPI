@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using ManagerAPI.Application.ExceptionHandling;
-using ManagerAPI.Application.FileArea.Models;
-using ManagerAPI.Application.FileArea.Models.Enums;
+using ManagerAPI.Application.MusicArea.Models;
+using ManagerAPI.Application.MusicArea.Models.Enums;
 using MediatR;
 using System.Diagnostics;
 
-namespace ManagerAPI.Application.FileArea.Commands.CloseFileProcess;
+namespace ManagerAPI.Application.MusicArea.Commands.CloseFileProcess;
 
 public class CloseFileProcessCommandHandler : IRequestHandler<CloseFileProcessCommand, bool>
 {
